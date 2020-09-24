@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.nio.CharBuffer;
+import java.util.Arrays;
 
 public class MainTest {
     @Test
@@ -36,6 +38,7 @@ public class MainTest {
                 l.toString());
 
         l.reset();
+
         args = new String[] {"-l", "-r", "-h", "testFolder"};
         flags.Arguments(args);
         Printer.printLs(new PrintWriter(l), flags);
@@ -43,5 +46,57 @@ public class MainTest {
                         "rwx Sep 24 2020 3К testFile1\n" +
                         "rwx Sep 24 2020 0Б testF",
                 l.toString());
+
+        args = new String[] {"-l", "-h" , "-r", "-o", "out\\testOutput\\testOut.txt", "testFolder"};
+        PrintWriter pw = new PrintWriter(flags.Arguments(args));
+        Printer.printLs(pw, flags);
+        pw.close();
+
+        FileReader fr = new FileReader("out\\testOutput\\testOut.txt");
+        int i = -1;
+        StringBuilder sb = new StringBuilder();
+        while ((i = fr.read()) != -1) {
+            sb.append((char) i);
+        }
+        fr.close();
+        assertEquals("rwx Sep 24 2020 11К testFile2\n" +
+                        "rwx Sep 24 2020 3К testFile1\n" +
+                        "rwx Sep 24 2020 0Б testF",
+                sb.toString());
+    }
+
+    @Test
+    void error1() {
+        String[] args = new String[]{"123"};
+        Flags flags = new Flags();
+        assertThrows(IllegalArgumentException.class, () -> flags.Arguments(args));
+    }
+
+    @Test
+    void error2() {
+        String[] args = new String[]{};
+        Flags flags = new Flags();
+        assertThrows(NullPointerException.class, () -> flags.Arguments(args));
+    }
+
+    @Test
+    void error3() {
+        String[] args = new String[]{"-l", "-h"};
+        Flags flags = new Flags();
+        assertThrows(IllegalArgumentException.class, () -> flags.Arguments(args));
+    }
+
+    @Test
+    void error4() {
+        String[] args = new String[]{"-l", "123"};
+        Flags flags = new Flags();
+        assertThrows(IllegalArgumentException.class, () -> flags.Arguments(args));
+    }
+
+    @Test
+    void error5() {
+        String[] args = new String[]{"-l", "-o", "testFolder"};
+        Flags flags = new Flags();
+        assertThrows(NullPointerException.class, () -> flags.Arguments(args));
     }
 }
