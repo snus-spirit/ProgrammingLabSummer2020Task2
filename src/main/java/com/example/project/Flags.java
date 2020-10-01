@@ -44,7 +44,7 @@ public class Flags {
         if (this.file == null)
             throw new IllegalArgumentException("Enter name of directory or file");
         if (!getFile().exists())
-            throw new IllegalArgumentException("Non-existent directory or file name");
+            throw new IllegalArgumentException("Non-existent directory or file");
         return output;
     }
 

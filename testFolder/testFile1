@@ -51,9 +51,11 @@ public class fileInformation {
     }
 
     private String transformPermissions() {
-        return ((this.permissions & 0b100) != 0 ? "r" : "-") +
-                ((this.permissions & 0b010) != 0 ? "w" : "-") +
-                ((this.permissions & 0b001) != 0 ? "x" : "-");
+        StringBuilder sb = new StringBuilder();
+        sb.append((this.permissions & 0b100) != 0 ? "r" : "-");
+        sb.append((this.permissions & 0b010) != 0 ? "w" : "-");
+        sb.append((this.permissions & 0b001) != 0 ? "x" : "-");
+        return sb.toString();
     }
 
     int getPermissions(){
