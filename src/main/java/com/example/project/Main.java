@@ -4,6 +4,7 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
+       // args = new String[] {"-l", "C:\\Users\\kk\\Desktop\\31"};
         Flags flags = new Flags();
         File output = flags.Arguments(args);
         try(PrintWriter pw = (output == null) ? new PrintWriter(System.out)
